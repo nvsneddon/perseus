@@ -13,6 +13,10 @@ config :perseus, Perseus.Repo,
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: System.schedulers_online() * 2
 
+config :perseus, Perseus.Redis,
+  host: "localhost",
+  port: 6379
+
 # We don't run a server during test. If one is required,
 # you can enable the server option below.
 config :perseus, PerseusWeb.Endpoint,
