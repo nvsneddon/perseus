@@ -3,7 +3,7 @@ defmodule PerseusWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
-    PerseusWeb.Plugs.AuthenticateUser
+    plug PerseusWeb.Plugs.AuthenticateUser
   end
 
   scope "/api" do

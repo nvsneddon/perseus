@@ -6,7 +6,7 @@ defmodule PerseusWeb.Resolvers.Auth do
   end
 
   def send_magic_link(_parent, %{email: email}, _resolution) do
-    case Accounts.send_login_email(email, &("localhost:3000/login/#{&1}")) do
+    case Accounts.send_login_email(email, &"localhost:3000/login/#{&1}") do
       :ok -> {:ok, true}
       :error -> {:ok, false}
     end
@@ -17,5 +17,5 @@ defmodule PerseusWeb.Resolvers.Auth do
       {:ok, session_token} -> {:ok, %{session_token: session_token}}
       {:error, msg} -> {:error, msg}
     end
-  end 
+  end
 end
