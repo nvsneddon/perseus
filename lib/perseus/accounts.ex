@@ -18,6 +18,19 @@ defmodule Perseus.Accounts do
     end
   end
 
+  def login_user_by_login_token(token) do
+    with {:ok, email} <- get_email_by_login_token(token),
+         true <- not is_nil(email),
+         {:ok, hashed_token} <- UserToken.get_encoded_hash(token),
+         {:ok, 1} <- Redis.del(@login_prefix <> hashed_token),
+         {:ok, token} <- generate_session_token(email) do
+      {:ok, token}
+    else
+      false -> {:error, "Expired token"}
+      _ -> {:error, "Redis error"}
+    end
+  end
+
   def generate_login_token(email) do
     generate_token(email, @login_prefix, @login_token_ttl)
   end
@@ -46,21 +59,5 @@ defmodule Perseus.Accounts do
   defp get_email_by_token(token, prefix) do
     {:ok, hashed_token} = UserToken.get_encoded_hash(token)
     Redis.get(prefix <> hashed_token)
-  end
-
-  def login_user_by_email_and_login_token(email, token) do
-    {:ok, expected_email} = get_email_by_login_token(token)
-    {:ok, hashed_token} = UserToken.get_encoded_hash(token)
-
-    if email == expected_email do
-      with {:ok, _} <- Redis.del(@login_prefix <> hashed_token),
-           {:ok, token} <- generate_session_token(email) do
-        {:ok, token}
-      else
-        _ -> {:error, "Redis error"}
-      end
-    else
-      {:error, "Unauthorized"}
-    end
   end
 end

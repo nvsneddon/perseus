@@ -3,10 +3,14 @@ defmodule PerseusWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    PerseusWeb.Plugs.AuthenticateUser
   end
 
-  scope "/api", PerseusWeb do
+  scope "/api" do
     pipe_through :api
+    forward "/graphiql", Absinthe.Plug.GraphiQL, schema: PerseusWeb.Schema
+
+    # forward "/", Absinthe.Plug, schema: PerseusWeb.Schema
   end
 
   # Enable Swoosh mailbox preview in development
