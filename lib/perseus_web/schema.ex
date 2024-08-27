@@ -5,11 +5,11 @@ defmodule PerseusWeb.Schema do
   alias PerseusWeb.Resolvers
 
   query do
-    field :get_session, non_null(:session) do
+    field :session, non_null(:session) do
       resolve &Resolvers.Auth.get_login_token/3
     end
 
-    field :get_user, non_null(:string) do
+    field :user, non_null(:string) do
       middleware(PerseusWeb.Middleware.RequireAuth)
 
       resolve fn _, _, %{context: %{current_user: user}} ->

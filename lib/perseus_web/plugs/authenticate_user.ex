@@ -10,18 +10,11 @@ defmodule PerseusWeb.Plugs.AuthenticateUser do
   end
 
   defp build_context(conn) do
-    case get_auth_token(conn) do
-      nil ->
-        %{}
-
-      token ->
-        case Accounts.get_email_by_session_token(token) do
-          {:ok, user} ->
-            %{current_user: user}
-
-          _ ->
-            %{}
-        end
+    with token when not is_nil(token) <- get_auth_token(conn),
+         {:ok, user} <- Accounts.get_email_by_session_token(token) do
+      %{current_user: user}
+    else
+      _ -> %{}
     end
   end
 
