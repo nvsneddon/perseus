@@ -5,7 +5,9 @@ defmodule PerseusWeb.Middleware.RequireAuth do
     case resolution.context[:current_user] do
       nil ->
         resolution
-        |> Absinthe.Resolution.put_result({:error, "Unauthorized"})
+        |> Absinthe.Resolution.put_result(
+          {:error, %{message: "Unauthenticated", code: "UNAUTHENTICATED"}}
+        )
 
       _user ->
         resolution
