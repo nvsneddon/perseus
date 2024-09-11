@@ -20,15 +20,5 @@ defmodule Perseus.Accounts.UserTokenTest do
       assert {:ok, false} = UserToken.verify_hash(token, hash2)
       assert {:ok, true} = UserToken.verify_hash(token2, hash2)
     end
-
-    test "returns error when nontoken is passed to the token" do
-      {_, hash} = UserToken.build_token()
-      assert :error = UserToken.verify_hash("not 64 string", hash)
-    end
-
-    test "returns error when nontoken is passed to the hash" do
-      {token, _} = UserToken.build_token()
-      assert :error = UserToken.verify_hash(token, "non 64 string")
-    end
   end
 end

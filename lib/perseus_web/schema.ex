@@ -1,6 +1,7 @@
 defmodule PerseusWeb.Schema do
   use Absinthe.Schema
   import_types PerseusWeb.Schema.AuthTypes
+  import_types PerseusWeb.Schema.Types.Binary
 
   alias PerseusWeb.Resolvers
 
@@ -26,7 +27,7 @@ defmodule PerseusWeb.Schema do
     end
 
     field :log_in, :session do
-      arg :token, non_null(:string)
+      arg :token, non_null(:binary)
 
       resolve &Resolvers.Auth.login_user/3
     end

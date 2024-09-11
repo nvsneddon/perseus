@@ -6,34 +6,14 @@ defmodule Perseus.Accounts.UserToken do
     token = :crypto.strong_rand_bytes(@rand_size)
     hashed_token = :crypto.hash(@hash_algorithm, token)
 
-    {encode(token), encode(hashed_token)}
+    {token, hashed_token}
   end
 
   def verify_hash(token, expected_hash) do
-    with {:ok, decoded_token} <- decode(token),
-         {:ok, expected_decoded_hash} <- decode(expected_hash) do
-      {:ok, :crypto.hash(@hash_algorithm, decoded_token) == expected_decoded_hash}
-    else
-      _ -> :error
-    end
+    {:ok, :crypto.hash(@hash_algorithm, token) == expected_hash}
   end
 
-  def get_encoded_hash(token) do
-    case decode(token) do
-      {:ok, decoded_token} ->
-        hashed_token = :crypto.hash(@hash_algorithm, decoded_token)
-        {:ok, encode(hashed_token)}
-
-      _ ->
-        :error
-    end
-  end
-
-  defp encode(token) do
-    Base.url_encode64(token, padding: false)
-  end
-
-  defp decode(token) do
-    Base.url_decode64(token, padding: false)
+  def hash(token) do
+    :crypto.hash(@hash_algorithm, token)
   end
 end

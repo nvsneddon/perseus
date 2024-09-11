@@ -2,10 +2,10 @@ defmodule PerseusWeb.Schema.AuthTypes do
   use Absinthe.Schema.Notation
 
   object :session do
-    field :session_token, :string
+    field :session_token, :binary
   end
 
   object :login do
-    field :token, :string
+    field :token, :binary
   end
 end

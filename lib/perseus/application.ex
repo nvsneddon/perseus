@@ -7,14 +7,12 @@ defmodule Perseus.Application do
 
   @impl true
   def start(_type, _args) do
-    redix_config = Application.get_env(:perseus, Perseus.Redis)
-
     children = [
       PerseusWeb.Telemetry,
       Perseus.Repo,
+      Perseus.Accounts.TokenStore,
       {DNSCluster, query: Application.get_env(:perseus, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Perseus.PubSub},
-      {Redix, name: :redix, host: redix_config[:host], port: redix_config[:port]},
       # Start the Finch HTTP client for sending emails
       {Finch, name: Perseus.Finch},
       # Start a worker by calling: Perseus.Worker.start_link(arg)

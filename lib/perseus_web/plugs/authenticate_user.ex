@@ -2,6 +2,7 @@ defmodule PerseusWeb.Plugs.AuthenticateUser do
   import Plug.Conn
 
   alias Perseus.Accounts
+  alias Perseus.Utils.BinaryUtils
 
   def init(opts), do: opts
 
@@ -19,8 +20,10 @@ defmodule PerseusWeb.Plugs.AuthenticateUser do
   end
 
   defp get_auth_token(conn) do
-    case get_req_header(conn, "authorization") do
-      ["Bearer " <> token] -> token
+    with ["Bearer " <> token] <- get_req_header(conn, "authorization"),
+         {:ok, decoded_token} <- BinaryUtils.decode(token) do
+      decoded_token
+    else
       _ -> nil
     end
   end
