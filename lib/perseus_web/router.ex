@@ -10,7 +10,7 @@ defmodule PerseusWeb.Router do
     pipe_through :api
     forward "/graphiql", Absinthe.Plug.GraphiQL, schema: PerseusWeb.Schema
 
-    # forward "/", Absinthe.Plug, schema: PerseusWeb.Schema
+    forward "/", Absinthe.Plug, schema: PerseusWeb.Schema
   end
 
   # Enable Swoosh mailbox preview in development
