@@ -1,5 +1,4 @@
 defmodule Perseus.Utils.BinaryUtils do
-
   @doc """
   Encodes binary data using Base64 URL encoding without padding.
   """
