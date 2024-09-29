@@ -14,9 +14,9 @@ defmodule Perseus.Accounts.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:first_name, :last_name, :email, :verified])
+    |> cast(attrs, [:first_name, :last_name, :email])
     |> validate_format(:email, ~r/@*\.[A-Za-z.]{2,}/, message: "Must be a valid email address")
     |> unique_constraint(:email, name: :unique_email)
-    |> validate_required([:first_name, :last_name, :email, :verified])
+    |> validate_required([:first_name, :last_name, :email])
   end
 end

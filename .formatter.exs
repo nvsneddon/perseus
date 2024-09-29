@@ -7,6 +7,7 @@
     import_types: 1,
     import_fields: 1,
     middleware: 1,
+    middleware: 2,
     resolve: 1,
     parse: 1,
     serialize: 1

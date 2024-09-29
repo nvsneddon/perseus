@@ -13,10 +13,17 @@ defmodule Perseus.Auth do
     with {:ok, _} <- Accounts.get_user_by_email(email),
          {:ok, token} <- generate_login_token(email),
          encoded_token <- BinaryUtils.encode(token),
-         {:ok, _} <- UserNotifier.deliver_magic_link(email, url_fun.(encoded_token)) do
+         {:ok, _} <- UserNotifier.deliver_login_link(email, url_fun.(encoded_token)) do
       :ok
     else
       _ -> :error
+    end
+  end
+
+  def send_signup_email(email, url_fun) do
+    with {:ok, token} <- generate_login_token(email),
+         encoded_token <- BinaryUtils.encode(token),
+         {:ok, _} <- UserNotifier.deliver_signup_link(email, url_fun.(encoded_token)) do
     end
   end
 

@@ -9,3 +9,9 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+Perseus.Repo.insert!(%Perseus.Accounts.User{
+  first_name: "John",
+  last_name: "Doe",
+  email: "jdoe@example.com",
+  verified: false
+})

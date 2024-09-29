@@ -16,7 +16,7 @@ defmodule Perseus.Accounts.UserNotifier do
     end
   end
 
-  def deliver_magic_link(email, url) do
+  def deliver_login_link(email, url) do
     deliver(email, "Login link", """
       Hello,
 
@@ -25,6 +25,20 @@ defmodule Perseus.Accounts.UserNotifier do
       #{url}
 
       If you didn't request a login link, please ignore this.
+
+      The Aquagoats Team
+    """)
+  end
+
+  def deliver_signup_link(email, url) do
+    deliver(email, "Signup link", """
+      Hello,
+
+      We're excited for you to join Aquagoats. Here's the link to register your account.
+
+      #{url}
+
+      If you didn't request a signup link, please ignore this.
 
       The Aquagoats Team
     """)

@@ -24,15 +24,13 @@ defmodule Perseus.AccountsTest do
       valid_attrs = %{
         first_name: "some first_name",
         last_name: "some last_name",
-        email: "someemail@example.com",
-        verified: true
+        email: "someemail@example.com"
       }
 
       assert {:ok, %User{} = user} = Accounts.create_user(valid_attrs)
       assert user.first_name == "some first_name"
       assert user.last_name == "some last_name"
       assert user.email == "someemail@example.com"
-      assert user.verified == true
     end
 
     test "create_user/1 with invalid data returns error changeset" do

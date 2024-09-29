@@ -13,7 +13,7 @@ defmodule PerseusWeb.Plugs.AuthenticateUser do
   defp build_context(conn) do
     case get_auth_token(conn) do
       {:ok, token_type, token} -> build_context_from_token(token, token_type)
-      _ -> %{}
+      _ -> %{error: "Authorization header invalid"}
     end
   end
 

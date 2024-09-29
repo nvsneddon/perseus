@@ -9,7 +9,7 @@ defmodule PerseusWeb.Schema do
 
   query do
     field :user, non_null(:user) do
-      middleware(PerseusWeb.Middleware.RequireAuth, %{token_type: :session})
+      middleware PerseusWeb.Middleware.RequireAuth, :session
 
       resolve fn _, _, %{context: %{user: user}} ->
         {:ok, user}
@@ -20,4 +20,10 @@ defmodule PerseusWeb.Schema do
   mutation do
     import_fields :auth_mutations
   end
+
+  def middleware(middleware, _field, %{identifier: :mutation}) do
+    middleware ++ [PerseusWeb.Middleware.ChangesetErrors]
+  end
+
+  def middleware(middleware, _, _), do: middleware
 end
