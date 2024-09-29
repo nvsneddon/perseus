@@ -5,8 +5,10 @@
   locals_without_parens: [
     arg: 2,
     import_types: 1,
+    import_fields: 1,
+    middleware: 1,
     resolve: 1,
-    serialize: 1,
-    parse: 1
+    parse: 1,
+    serialize: 1
   ]
 ]

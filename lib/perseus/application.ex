@@ -10,7 +10,7 @@ defmodule Perseus.Application do
     children = [
       PerseusWeb.Telemetry,
       Perseus.Repo,
-      Perseus.Accounts.TokenStore,
+      Perseus.Auth.TokenStore,
       {DNSCluster, query: Application.get_env(:perseus, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Perseus.PubSub},
       # Start the Finch HTTP client for sending emails

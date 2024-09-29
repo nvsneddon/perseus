@@ -1,4 +1,4 @@
-defmodule PerseusWeb.Schema.AuthTypes do
+defmodule PerseusWeb.Schema.Types.AuthTypes do
   use Absinthe.Schema.Notation
 
   object :session do

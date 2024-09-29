@@ -37,7 +37,7 @@ defmodule Perseus.MixProject do
       {:phoenix, "~> 1.7.11"},
       {:phoenix_ecto, "~> 4.4"},
       {:ecto_sql, "~> 3.11"},
-      {:postgrex, ">= 0.0.0"},
+      {:postgrex, "~> 0.19.0"},
       {:swoosh, "~> 1.5"},
       {:finch, "~> 0.13"},
       {:telemetry_metrics, "~> 0.6"},

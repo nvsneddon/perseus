@@ -1,7 +1,7 @@
-defmodule Perseus.Accounts.UserTokenTest do
+defmodule Perseus.Auth.UserTokenTest do
   use Perseus.DataCase
 
-  alias Perseus.Accounts.UserToken
+  alias Perseus.Auth.UserToken
 
   describe "build_token/0" do
     test "builds token that can be verified" do

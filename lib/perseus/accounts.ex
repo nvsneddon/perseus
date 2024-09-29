@@ -1,59 +1,113 @@
 defmodule Perseus.Accounts do
-  alias Perseus.Accounts.UserToken
-  alias Perseus.Accounts.UserNotifier
-  alias Perseus.Accounts.TokenStore
-  alias Perseus.Utils.BinaryUtils
+  @moduledoc """
+  The Accounts context.
+  """
 
-  @magic_link_token_ttl 60 * 15
-  @session_token_ttl 60 * 60
+  import Ecto.Query, warn: false
+  alias Perseus.Repo
 
-  def send_login_email(email, url_fun) do
-    with {:ok, token} <- generate_login_token(email),
-         encoded_token <- BinaryUtils.encode(token),
-         {:ok, _} <- UserNotifier.deliver_magic_link(email, url_fun.(encoded_token)) do
-      :ok
-    else
-      _ -> :error
+  alias Perseus.Accounts.User
+
+  @doc """
+  Returns the list of users.
+
+  ## Examples
+
+      iex> list_users()
+      [%User{}, ...]
+
+  """
+  def list_users do
+    Repo.all(User)
+  end
+
+  @doc """
+  Gets a single user.
+
+  Raises `Ecto.NoResultsError` if the User does not exist.
+
+  ## Examples
+
+      iex> get_user!(123)
+      %User{}
+
+      iex> get_user!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_user!(id), do: Repo.get!(User, id)
+
+  def get_user_by_email(email) do
+    query = from u in User, where: u.email == ^email
+
+    case Repo.one(query) do
+      nil -> {:error, "User not found"}
+      user -> {:ok, user}
     end
   end
 
-  def login_user_by_login_token(token) do
-    with {:ok, email} <- get_email_by_login_token(token),
-         {:ok, session_token} <- generate_session_token(email) do
-      {:ok, session_token}
-    else
-      {:error, :expired_token} ->
-        {:error, "Expired token"}
+  @doc """
+  Creates a user.
 
-      {:error, :not_found} ->
-        {:error, "Not found"}
+  ## Examples
 
-      _ ->
-        {:error, "Token store Error"}
-    end
+      iex> create_user(%{field: value})
+      {:ok, %User{}}
+
+      iex> create_user(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_user(attrs \\ %{}) do
+    %User{}
+    |> User.changeset(attrs)
+    |> Repo.insert()
   end
 
-  def generate_login_token(email) do
-    {token, hashed_token} = UserToken.build_token()
-    TokenStore.store_token(:magic_link, hashed_token, email, @magic_link_token_ttl)
-    {:ok, token}
+  @doc """
+  Updates a user.
+
+  ## Examples
+
+      iex> update_user(user, %{field: new_value})
+      {:ok, %User{}}
+
+      iex> update_user(user, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_user(%User{} = user, attrs) do
+    user
+    |> User.changeset(attrs)
+    |> Repo.update()
   end
 
-  defp generate_session_token(email) do
-    {token, hashed_token} = UserToken.build_token()
-    TokenStore.store_token(:session, hashed_token, email, @session_token_ttl)
-    {:ok, token}
+  @doc """
+  Deletes a user.
+
+  ## Examples
+
+      iex> delete_user(user)
+      {:ok, %User{}}
+
+      iex> delete_user(user)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_user(%User{} = user) do
+    Repo.delete(user)
   end
 
-  def get_email_by_login_token(token) do
-    token
-    |> UserToken.hash()
-    |> TokenStore.validate_magic_link_token()
-  end
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking user changes.
 
-  def get_email_by_session_token(token) do
-    token
-    |> UserToken.hash()
-    |> TokenStore.validate_session_token()
+  ## Examples
+
+      iex> change_user(user)
+      %Ecto.Changeset{data: %User{}}
+
+  """
+  def change_user(%User{} = user, attrs \\ %{}) do
+    User.changeset(user, attrs)
   end
 end

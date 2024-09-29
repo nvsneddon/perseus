@@ -1,4 +1,4 @@
-defmodule Perseus.Accounts.UserToken do
+defmodule Perseus.Auth.UserToken do
   @hash_algorithm :sha256
   @rand_size 32
 
