@@ -12,6 +12,7 @@ defmodule PerseusWeb.Plugs.AuthenticateUser do
 
   defp build_context(conn) do
     case get_auth_token(conn) do
+      {:ok, nil, nil} -> %{}
       {:ok, token_type, token} -> build_context_from_token(token, token_type)
       _ -> %{error: "Authorization header invalid"}
     end
@@ -42,6 +43,7 @@ defmodule PerseusWeb.Plugs.AuthenticateUser do
 
   defp get_auth_token(conn) do
     case get_req_header(conn, "authorization") do
+      [] -> {:ok, nil, nil}
       ["Bearer " <> token] -> decode_token(:session, token)
       ["MagicLink " <> token] -> decode_token(:magic_link, token)
       ["Signup " <> token] -> decode_token(:signup, token)

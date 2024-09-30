@@ -16,7 +16,7 @@ defmodule Perseus.Accounts.User do
     user
     |> cast(attrs, [:first_name, :last_name, :email])
     |> validate_format(:email, ~r/@*\.[A-Za-z.]{2,}/, message: "Must be a valid email address")
-    |> unique_constraint(:email, name: :unique_email)
+    |> unique_constraint(:email)
     |> validate_required([:first_name, :last_name, :email])
   end
 end

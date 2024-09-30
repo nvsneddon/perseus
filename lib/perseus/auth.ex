@@ -13,11 +13,9 @@ defmodule Perseus.Auth do
     with {:ok, _} <- Accounts.get_user_by_email(email),
          {:ok, token} <- generate_login_token(email),
          encoded_token <- BinaryUtils.encode(token) do
-      # If `url_fun` is provided, deliver the login link via email
       if url_fun do
         UserNotifier.deliver_login_link(email, url_fun.(encoded_token))
       else
-        # Otherwise, just return the encoded token
         {:ok, encoded_token}
       end
     else
@@ -25,26 +23,16 @@ defmodule Perseus.Auth do
     end
   end
 
-  def send_signup_email(email, url_fun) do
-    with {:ok, token} <- generate_login_token(email),
-         encoded_token <- BinaryUtils.encode(token),
-         {:ok, _} <- UserNotifier.deliver_signup_link(email, url_fun.(encoded_token)) do
-    end
-  end
-
-  def login_user_by_login_token(token) do
-    with {:ok, email} <- find_email(:magic_link, token),
-         {:ok, session_token} <- generate_signup_token(email) do
-      {:ok, session_token}
+  def send_signup_email(email, url_fun \\ nil) do
+    with {:ok, token} <- generate_signup_token(email),
+         encoded_token <- BinaryUtils.encode(token) do
+      if url_fun do
+        UserNotifier.deliver_signup_link(email, url_fun.(encoded_token))
+      else
+        {:ok, encoded_token}
+      end
     else
-      {:error, :expired_token} ->
-        {:error, "Expired token"}
-
-      {:error, :not_found} ->
-        {:error, "Not found"}
-
-      _ ->
-        {:error, "Token store Error"}
+      _ -> :error
     end
   end
 

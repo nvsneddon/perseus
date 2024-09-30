@@ -1,5 +1,5 @@
 defmodule PerseusWeb.Resolvers.AuthTest do
-  use Perseus.DataCase
+  use Perseus.DataCase, async: true
 
   alias Perseus.Auth
   alias PerseusWeb.Resolvers

@@ -24,7 +24,7 @@ defmodule PerseusWeb.Schema.Mutations.AuthMutations do
 
     field :sign_up, :sign_up_response do
       arg :user, :user_input
-      middleware PerseusWeb.Middleware.RequireAuth, :magic_link
+      middleware PerseusWeb.Middleware.RequireAuth, :signup
 
       resolve &Resolvers.Auth.signup_user/3
     end

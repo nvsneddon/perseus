@@ -12,8 +12,14 @@ defmodule PerseusWeb.Resolvers.Auth do
   end
 
   def send_signup_link(_parent, %{email: email}, _resolution) do
-    Auth.send_signup_email(email, &"localhost:3000/signup/#{&1}")
-    {:ok, true}
+    case Accounts.get_user_by_email(email) do
+      {:error, _} ->
+        Auth.send_signup_email(email, &"localhost:3000/signup/#{&1}")
+        {:ok, true}
+
+      {:ok, _user} ->
+        {:ok, true}
+    end
   end
 
   def login_user(_parent, _args, %{context: %{email: email}}) do

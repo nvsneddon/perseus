@@ -4,6 +4,8 @@ defmodule Perseus.AccountsFixtures do
   entities via the `Perseus.Accounts` context.
   """
 
+  def unique_user_email, do: "user#{System.unique_integer()}@example.com"
+
   @doc """
   Generate a user.
   """
@@ -18,7 +20,7 @@ defmodule Perseus.AccountsFixtures do
 
   def valid_user_attributes(attr \\ %{}) do
     Enum.into(attr, %{
-      email: "someemail@example.com",
+      email: unique_user_email(),
       first_name: "some first_name",
       last_name: "some last_name",
       verified: true

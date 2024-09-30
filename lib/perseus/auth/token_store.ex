@@ -44,7 +44,7 @@ defmodule Perseus.Auth.TokenStore do
   end
 
   def validate_signup_token(token) do
-    validate_token(token, @signup_table, true)
+    validate_token(token, @signup_table)
   end
 
   def validate_session_token(token) do
