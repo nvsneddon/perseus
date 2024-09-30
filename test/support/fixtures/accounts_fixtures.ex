@@ -10,14 +10,18 @@ defmodule Perseus.AccountsFixtures do
   def user_fixture(attrs \\ %{}) do
     {:ok, user} =
       attrs
-      |> Enum.into(%{
-        email: "someemail@example.com",
-        first_name: "some first_name",
-        last_name: "some last_name",
-        verified: true
-      })
+      |> valid_user_attributes()
       |> Perseus.Accounts.create_user()
 
     user
+  end
+
+  def valid_user_attributes(attr \\ %{}) do
+    Enum.into(attr, %{
+      email: "someemail@example.com",
+      first_name: "some first_name",
+      last_name: "some last_name",
+      verified: true
+    })
   end
 end

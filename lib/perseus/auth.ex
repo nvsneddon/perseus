@@ -9,12 +9,17 @@ defmodule Perseus.Auth do
   @signup_token_ttl 60 * 15
   @session_token_ttl 60 * 60
 
-  def send_login_email(email, url_fun) do
+  def send_login_email(email, url_fun \\ nil) do
     with {:ok, _} <- Accounts.get_user_by_email(email),
          {:ok, token} <- generate_login_token(email),
-         encoded_token <- BinaryUtils.encode(token),
-         {:ok, _} <- UserNotifier.deliver_login_link(email, url_fun.(encoded_token)) do
-      :ok
+         encoded_token <- BinaryUtils.encode(token) do
+      # If `url_fun` is provided, deliver the login link via email
+      if url_fun do
+        UserNotifier.deliver_login_link(email, url_fun.(encoded_token))
+      else
+        # Otherwise, just return the encoded token
+        {:ok, encoded_token}
+      end
     else
       _ -> :error
     end

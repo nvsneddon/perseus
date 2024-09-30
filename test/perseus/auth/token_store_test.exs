@@ -13,6 +13,7 @@ defmodule Perseus.Auth.TokenStoreTest do
   setup do
     # Create an ETS table for testing purposes
     init_table(@magic_link_table)
+    init_table(@signup_table)
     init_table(@session_table)
     :ok
   end
@@ -56,9 +57,9 @@ defmodule Perseus.Auth.TokenStoreTest do
     end
 
     test "stores session token correctly", %{token: token, user: user, ttl: ttl} do
-      TokenStore.store_signup_token(token, user, ttl)
+      TokenStore.store_session_token(token, user, ttl)
 
-      assert [{^token, ^user, _}] = :ets.lookup(@signup_table, token)
+      assert [{^token, ^user, _}] = :ets.lookup(@session_table, token)
     end
   end
 
